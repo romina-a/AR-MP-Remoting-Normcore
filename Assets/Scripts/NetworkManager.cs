@@ -11,11 +11,13 @@ using UnityEditor;
 
 namespace com.perceptlab.armultiplayer
 {
+    [RequireComponent(typeof(Realtime))]
     public class NetworkManager : MonoBehaviour
     {
+        [SerializeField]
         private string roomName = "MyRoomName";
         private Realtime _realtime;
-        [SerializeField] Transform World;
+        [SerializeField] Transform World = default;
         [SerializeField] List<string> interactablePrefabNames;
         private string originPrefabName = "OriginRT";
 
@@ -38,9 +40,15 @@ namespace com.perceptlab.armultiplayer
         private void DidConnectToRoom(Realtime realtime)
         {
             RLogger.Log("NetworkManager DidConnectToRoom called and client id is " + _realtime.room.clientID);
-            if (_realtime.room.clientID != 0)
-                return;
+            if (_realtime.room.clientID == 0)
+                instantiateObjects(realtime);
 
+            instantiaceOrigin(realtime);
+            
+        }
+
+        void instantiateObjects(Realtime realtime)
+        {
             // Instantiate the Player for this client once we've successfully connected to the room
             Realtime.InstantiateOptions options = new InstantiateOptions
             {
@@ -50,7 +58,7 @@ namespace com.perceptlab.armultiplayer
                 destroyWhenLastClientLeaves = true,
                 useInstance = realtime
             };
-            
+
             float x_offset = 0.1f;
             float x_initial = -0.3f;
             int i = 0;
@@ -67,13 +75,20 @@ namespace com.perceptlab.armultiplayer
                 cube.transform.localRotation = Quaternion.identity;
                 realtimeTransform.RequestOwnership();
             }
+        }
 
-            GameObject origin = Realtime.Instantiate(prefabName: originPrefabName, Vector3.zero, Quaternion.identity, options);
-            if (World != null)
-            {
-                origin.transform.SetParent(World);
-            }
-            origin.transform.localPosition = Vector3.zero;
+        void instantiaceOrigin(Realtime realtime)
+        {
+            GameObject origin = Realtime.Instantiate(
+                prefabName: originPrefabName, Vector3.zero, Quaternion.identity,
+                new InstantiateOptions
+                {
+                    ownedByClient = true,
+                    preventOwnershipTakeover = true,
+                    destroyWhenOwnerLeaves = true,
+                    destroyWhenLastClientLeaves = true,
+                    useInstance = realtime
+                });
         }
 
     }

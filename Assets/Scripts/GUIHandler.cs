@@ -1,22 +1,20 @@
 using com.perceptlab.armultiplayer;
 using Microsoft.MixedReality.OpenXR.Remoting;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 public class GUIHandler : MonoBehaviour
 {
 
     private bool remotingConnected = false;
     private bool aligned = false;
+    private int haveRemoting = -1;
     [SerializeField]
     private HolographicRemotingConnectionHandler remotingHandler;
     [SerializeField]
     private AlignTheWorld align;
     
     [SerializeField, Tooltip("Default IP to use to connect with Holographic Remoting. Must have a HolographicRemoteConnect Component to Connect")]
-    string IP = "192.168.0.103";
+    string IP = "192.168.0.108";
     string disconnectReason = "";
 
 
@@ -27,6 +25,10 @@ public class GUIHandler : MonoBehaviour
             remotingHandler.onConnectedToDevice.AddListener(delegate () { remotingConnected = true;});
             remotingHandler.onDisconnectedFromDevice.AddListener(delegate (DisconnectReason reason) { disconnectReason = reason.ToString();  remotingConnected = false;});
         }
+        else
+        {
+            haveRemoting = 0;
+        }
         align.onDoneAlign.AddListener(()=> { aligned = true; });
 
     }
@@ -34,9 +36,14 @@ public class GUIHandler : MonoBehaviour
     // Start is called before the first frame update
     private void OnGUI()
     {
-        if (remotingHandler != null)
+        if (haveRemoting == -1)
         {
-            RemotingInput();
+            GetRemotingInput();
+            return;
+        }
+        if (haveRemoting == 1)
+        {
+            RemotingConnectionInput();
         }
         if (aligned == false)
         {
@@ -44,7 +51,21 @@ public class GUIHandler : MonoBehaviour
         }
     }
 
-    private void RemotingInput()
+    private void GetRemotingInput()
+    {
+       
+        if (GUI.Button(new Rect(365, 10, 100, 30), "Remoting"))
+        {
+            haveRemoting = 1; return;
+        }
+        if (GUI.Button(new Rect(265, 10, 100, 30), "No Remoting"))
+        {
+            haveRemoting = 0; return;
+        }
+
+    }
+
+    private void RemotingConnectionInput()
     {
         GUI.Label(new Rect(10, 10, 150, 30), "Player's IP:");
         if (disconnectReason != "")

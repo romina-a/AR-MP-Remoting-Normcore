@@ -6,7 +6,6 @@
  * **/
 
 using Microsoft.MixedReality.OpenXR.Remoting;
-using System.Xml;
 using UnityEngine;
 using UnityEngine.Events;
 namespace com.perceptlab.armultiplayer
@@ -15,7 +14,7 @@ namespace com.perceptlab.armultiplayer
     {
         private bool connected { get; set; } = false;
 
-        private RemotingConnectConfiguration remotingConfiguration = new() { RemoteHostName = "192.168.0.103", RemotePort = 8265, MaxBitrateKbps = 20000 };
+        private RemotingConnectConfiguration remotingConfiguration = new() { RemoteHostName = "127.0.0.0", RemotePort = 8265, MaxBitrateKbps = 20000 };
 
         [SerializeField, Tooltip("Is invoked when connected to Hololens")]
         public UnityEvent onConnectedToDevice;
@@ -52,11 +51,7 @@ namespace com.perceptlab.armultiplayer
 
         private void onDisconnected(DisconnectReason reason)
         {
-            RLogger.Log("HolographicRemoting: Disconnected");
-            if (reason != DisconnectReason.DisconnectRequest)
-            {
-                RLogger.Log("HolographicRemoting: unexpected disconnect, reason: " + reason.ToString());
-            }
+            RLogger.Log("HolographicRemoting: Disconnected. Reason: "+reason.ToString());
             connected = false;
             onDisconnectedFromDevice?.Invoke(reason);
         }

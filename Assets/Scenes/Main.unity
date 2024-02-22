@@ -153,7 +153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6150802355699527499, guid: b806d62feccb4774e90be8b775b9f06b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6150802355699527499, guid: b806d62feccb4774e90be8b775b9f06b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -570,6 +570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb8cb82ba50e734ba9c611f11cd04fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomName: MultiDeviceRoom
   World: {fileID: 44607002}
   interactablePrefabNames:
   - TriangleRT
@@ -670,7 +671,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92ae737ca83204943ad983f612d8ccb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  world: {fileID: 44607001}
+  room: {fileID: 44607001}
+  player: {fileID: 1741523886}
   move_speed: 0.003
   rotatoin_speed: 0.1
   onDoneAlign:
@@ -704,16 +706,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1741523886 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2351505567455720334, guid: 4d7e2f87fefe0ba468719b15288b46e7, type: 3}
+  m_PrefabInstance: {fileID: 727371503}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 705507995}
+  - {fileID: 701948590}
   - {fileID: 554178971}
   - {fileID: 727371503}
   - {fileID: 1253038521}
-  - {fileID: 1521963177}
   - {fileID: 1001609170}
+  - {fileID: 1521963177}
   - {fileID: 1610613297}
   - {fileID: 44607000}
-  - {fileID: 701948590}
